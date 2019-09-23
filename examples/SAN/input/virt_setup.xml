@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topology id="SAN">
+
+    <storage_type id="HDD" size="100MB">
+        <model_prop id="read" value="1Bps"/>
+        <model_prop id="write" value="1Bps"/>
+    </storage_type>
+
+    <storage_type id="SSD" size="100MB">
+        <model_prop id="read" value="1Bps"/>
+        <model_prop id="write" value="1Bps"/>
+    </storage_type>
+
+    <!--Носители информации-->
+    <jbod id="JBOD1" storage_id="HDD" amount="4"/>
+    <jbod id="JBOD2" storage_id="SSD" amount="4"/>
+
+    <volume id="Volume1">
+        <mount  id="JBOD1"/>
+        <mount  id="JBOD2"/>
+    </volume>
+
+    <host id="IOBalancer" speed="1Gf" nCore="4" type="io-balancer"/>
+    <host id="NetworkSwitch" speed="1Gf" nCore="4" type="network_switch"/>
+
+    <host id="Client" speed="1f" nCore="4" type="client"/>
+    <host id="Helper" speed="1f" nCore="4" type="anomaly"/>
+
+    <host id="Server1" speed="1f" nCore="1" type="controller"/>
+    <host id="Server2" speed="1f" nCore="1" type="controller"/>
+
+    <host id="FabricManager" speed="1f" nCore="4" type="pci-fabric">
+        <mount storageId="CacheArray" name="/Cache"/>
+    </host>
+
+
+    <host id="Cache1" speed="1f" nCore="1" type="storage"/>
+
+    <host id="JBOD1" speed="1f" nCore="1" type="storage"/>
+    <host id="JBOD2" speed="1f" nCore="1" type="storage"/>
+
+    <!--LINKS-->
+    <link id="client_lb" bandwidth="1Bps" latency="1" type="link"/>
+
+    <link id="Client_Server1" bandwidth="1Bps" latency="1" type="link"/>
+    <link id="Client_Server2" bandwidth="1Bps" latency="1" type="link"/>
+
+    <link id="Server1_JBOD1" bandwidth="1Bps" latency="1" type="link"/>
+    <link id="Server1_JBOD2" bandwidth="1Bps" latency="1" type="link"/>
+
+    <link id="Server2_JBOD1" bandwidth="1Bps" latency="1" type="link"/>
+    <link id="Server2_JBOD2" bandwidth="1Bps" latency="1" type="link"/>
+
+
+    <!--ROUTES FROM LOAD BALANCER TO EACH SERVER-->
+    <route src="Client" dst="IOBalancer">
+        <link_ctn id="client_lb"/>
+    </route>
+
+    <route src="Client" dst="Server1">
+        <link_ctn id="Client_Server1"/>
+    </route>
+    <route src="Client" dst="Server2">
+        <link_ctn id="Client_Server2"/>
+    </route>
+
+
+    <route src="Server1" dst="JBOD1">
+        <link_ctn id="Server1_JBOD1"/>
+    </route>
+    <route src="Server1" dst="JBOD2">
+        <link_ctn id="Server1_JBOD2"/>
+    </route>
+    <route src="Server2" dst="JBOD1">
+        <link_ctn id="Server2_JBOD1"/>
+    </route>
+    <route src="Server2" dst="JBOD2">
+        <link_ctn id="Server2_JBOD2"/>
+    </route>
+
+
+</topology>

@@ -1,0 +1,5 @@
+<topology id="tatlin">
+
+    <host id="A" speed="1f" nCore="1"/>
+
+</topology>

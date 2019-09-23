@@ -1,0 +1,6 @@
+<deployment>
+
+    <process host="B" function="write_packet">
+    </process>
+
+</deployment>

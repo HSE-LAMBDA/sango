@@ -1,0 +1,11 @@
+<deployment>
+    <process host="Server1" function="sender">
+    </process>
+
+    <process host="Server2" function="receiver">
+        <argument value="Server2_1"/>
+    </process>
+
+    <process host="anomaly" function="anomaly"/>
+
+</deployment>

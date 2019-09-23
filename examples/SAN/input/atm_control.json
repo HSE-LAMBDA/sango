@@ -1,0 +1,36 @@
+{
+  "0":{
+    "air_temp":1,
+    "humidity": 1,
+    "atm_pressure":1,
+    "vibration": 1
+  },
+
+  "5":{
+    "air_temp":2,
+    "humidity": 2,
+    "atm_pressure":2,
+    "vibration": 2
+  },
+
+  "10":{
+    "air_temp": 3,
+    "humidity": 3,
+    "atm_pressure": 3,
+    "vibration": 3
+  },
+
+  "15":{
+    "air_temp": 4,
+    "humidity": 4,
+    "atm_pressure": 4,
+    "vibration": 4
+  },
+
+  "20":{
+    "air_temp": 5,
+    "humidity": 5,
+    "atm_pressure": 5,
+    "vibration": 5
+  }
+}

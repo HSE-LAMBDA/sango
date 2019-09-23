@@ -1,0 +1,11 @@
+<deployment>
+    <process host="A" function="execute1">
+    </process>
+
+    <process host="A" function="execute2">
+    </process>
+
+    <!--<process host="A" function="execute3">-->
+    <!--</process>-->
+
+</deployment>

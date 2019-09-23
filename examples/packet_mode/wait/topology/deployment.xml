@@ -1,0 +1,5 @@
+<deployment>
+    <process host="A" function="wait">
+    </process>
+
+</deployment>

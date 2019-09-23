@@ -1,0 +1,9 @@
+<deployment>
+    <process host="A" function="sender">
+    </process>
+
+    <process host="B" function="receiver">
+        <argument value="B_1"/>
+    </process>
+
+</deployment>

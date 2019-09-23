@@ -1,0 +1,12 @@
+<topology id="tatlin">
+
+    <host id="A" speed="1f"/>
+    <host id="B" speed="1f"/>
+
+    <link id="link" bandwidth="1Bps" latency="0"/>
+
+    <route src="A" dst="B">
+        <link_ctn id="link"/>
+    </route>
+
+</topology>

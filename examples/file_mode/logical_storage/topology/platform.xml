@@ -1,0 +1,14 @@
+<topology id="tatlin">
+
+    <storage_type id="HDD" size="100GB">
+        <model_prop id="read" value="1Bps"/>
+        <model_prop id="write" value="1Bps"/>
+    </storage_type>
+
+    <storage_array id="JBOD1" storage_id="HDD" amount="6"/>
+
+    <host id="A" speed="1f">
+        <mount storageId="JBOD1" name="/JBOD1"/>
+    </host>
+
+</topology>

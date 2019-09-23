@@ -1,0 +1,6 @@
+<deployment>
+
+    <process host="B" function="read_packet">
+    </process>
+
+</deployment>

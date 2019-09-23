@@ -1,0 +1,14 @@
+{
+  "4K": {
+    "size": 4096,
+    "transmission_time": 1,
+    "latency_time": 1,
+    "processing_time": 1,
+    "write_rate_time": 1,
+    "read_rate_time": 1,
+    "write_seek_time": 1,
+    "read_seek_time": 1,
+    "write_overheads_time": 1,
+    "read_overheads_time": 1
+  }
+}

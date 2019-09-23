@@ -1,0 +1,14 @@
+<topology id="tatlin">
+
+    <storage_type id="Cache" size="256GB">
+        <model_prop id="read" value="1Bps"/>
+        <model_prop id="write" value="1Bps"/>
+    </storage_type>
+
+    <jbod id="Cache" storage_id="Cache" amount="1"/>
+
+    <host id="B" speed="1f" nCore="1">
+        <mount storageId="Cache" name="/Cache"/>
+    </host>
+
+</topology>

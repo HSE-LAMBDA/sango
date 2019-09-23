@@ -1,0 +1,4 @@
+<deployment>
+    <process host="A" function="storage">
+    </process>
+</deployment>

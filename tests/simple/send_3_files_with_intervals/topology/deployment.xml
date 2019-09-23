@@ -1,0 +1,43 @@
+<deployment>
+    <process host="A" function="sender">
+        <argument value="40"/>
+        <argument value="B_1"/>
+        <argument value="First sender"/>
+        <argument value="0"/>
+    </process>
+
+    <process host="A" function="sender">
+        <argument value="100"/>
+        <argument value="B_2"/>
+        <argument value="Second sender"/>
+        <argument value="20"/>
+    </process>
+
+    <process host="A" function="sender">
+        <argument value="100"/>
+        <argument value="B_3"/>
+        <argument value="Third sender"/>
+        <argument value="0"/>
+    </process>
+
+
+
+
+
+
+    <process host="B" function="receiver">
+        <argument value="B_1"/>
+        <argument value="First receiver"/>
+    </process>
+
+    <process host="B" function="receiver">
+        <argument value="B_2"/>
+        <argument value="Second receiver"/>
+    </process>
+
+    <process host="B" function="receiver">
+        <argument value="B_3"/>
+        <argument value="Third receiver"/>
+    </process>
+
+</deployment>
