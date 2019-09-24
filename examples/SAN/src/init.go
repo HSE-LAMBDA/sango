@@ -2,7 +2,7 @@ package src
 
 import (
 	"encoding/json"
-	"lib"
+	lib "gosan"
 	"strings"
 )
 
@@ -97,7 +97,6 @@ func initControllers() []*Controller {
 	return cons
 }
 
-
 func initSANJbods() []*SANJBODController {
 	jbods := lib.GetAllJBODs()
 	tatJBODs := make([]*SANJBODController, 0)
@@ -113,14 +112,12 @@ func initSANJbods() []*SANJBODController {
 	return tatJBODs
 }
 
-
 func initIobalancer(cons []*Controller, jbods []*SANJBODController) *IOBalancer {
 	host := lib.GetHostByName("IOBalancer")
 	iob := NewIOBalancer(host, cons, jbods)
 	FORK("iob", iob.IOBalancerProcessManager, host, nil)
 	return iob
 }
-
 
 func initTracer(data *TracerFlags, iob *IOBalancer, acm *AtmosphereControlManager) *TracerManager {
 	tm := NewTracerManager(iob, acm, nil)

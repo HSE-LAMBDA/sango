@@ -2,7 +2,7 @@ package src
 
 import (
 	"fmt"
-	"lib"
+	lib "gosan"
 	"log"
 	"math"
 	"math/rand"
@@ -107,9 +107,6 @@ func (ad *AtmosphereDependency) getFailProbability(current float64) float64 {
 	}
 	return value
 }
-
-
-
 
 type UniformGenerator struct {
 	rd *rand.Rand

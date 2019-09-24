@@ -1,7 +1,7 @@
 package src
 
 import (
-	"lib"
+	lib "gosan"
 	"log"
 	"math"
 	"math/rand"
@@ -27,11 +27,11 @@ func NewClientManager(host *lib.Host, iob *IOBalancer, id string, capacity float
 	parMap map[int]float64) *ClientManager {
 
 	return &ClientManager{
-		Host: host,
-		iob:  iob,
-		Cap:  capacity,
-		id:   id,
-		numJobsMap:parMap,
+		Host:       host,
+		iob:        iob,
+		Cap:        capacity,
+		id:         id,
+		numJobsMap: parMap,
 	}
 }
 
@@ -109,7 +109,7 @@ func (CL *ClientManager) PacketSenderReceiverProcess(TP *SANProcess, data interf
 		}
 
 		//parallelOverhead = math.Pow(parallelOverhead, float64(file.NumJobs)) / float64(file.NumJobs)
-		parallelOverhead = parallelOverhead * math.Exp(0.1 * float64(file.NumJobs)) / float64(file.NumJobs)
+		parallelOverhead = parallelOverhead * math.Exp(0.1*float64(file.NumJobs)) / float64(file.NumJobs)
 		TP.SIM_wait(parallelOverhead + (packetSize / cap))
 
 	}

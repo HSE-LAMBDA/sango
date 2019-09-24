@@ -1,7 +1,7 @@
 package src
 
 import (
-	"lib"
+	lib "gosan"
 	"log"
 )
 

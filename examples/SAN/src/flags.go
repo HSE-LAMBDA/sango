@@ -2,7 +2,7 @@ package src
 
 import (
 	"flag"
-	"lib"
+	lib "gosan"
 	"strings"
 )
 

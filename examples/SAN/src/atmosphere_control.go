@@ -2,7 +2,7 @@ package src
 
 import (
 	"encoding/json"
-	"lib"
+	lib "gosan"
 	"log"
 	"sort"
 	"strconv"

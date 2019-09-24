@@ -1,19 +1,19 @@
 package src
 
 import (
-	"lib"
+	lib "gosan"
 	"log"
 )
 
 type (
 	SANJBODController struct {
-		*lib.Host         `json:"-"`
-		*NamingProps      `json:"-"`
-		*CommonProps      `json:"-"`
-		*SANComponent  `json:"-"`
-		disks             map[int]*SANDisk `json:"-"`
-		disksSlice        []*SANDisk       `json:"-"`
-		iob               *IOBalancer         `json:"-"`
+		*lib.Host     `json:"-"`
+		*NamingProps  `json:"-"`
+		*CommonProps  `json:"-"`
+		*SANComponent `json:"-"`
+		disks         map[int]*SANDisk `json:"-"`
+		disksSlice    []*SANDisk       `json:"-"`
+		iob           *IOBalancer      `json:"-"`
 	}
 
 	DiskState struct {
@@ -126,8 +126,8 @@ func NewSANJBODController(libJBOD *lib.JBOD) *SANJBODController {
 
 	naming := NewNamingProps(libJBOD.Name, "Storage", libJBOD.Name)
 	jbod := &SANJBODController{
-		Host:             host,
-		NamingProps:      naming,
+		Host:        host,
+		NamingProps: naming,
 		SANComponent: &SANComponent{
 			currentState: "default",
 		},

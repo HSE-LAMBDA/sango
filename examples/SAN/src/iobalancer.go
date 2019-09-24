@@ -5,7 +5,7 @@ package src
 
 import (
 	"fmt"
-	"lib"
+	lib "gosan"
 	"log"
 	"math/rand"
 )
@@ -23,21 +23,21 @@ type (
 		*NamingProps
 		*IOBalancerProps `json:"props"`
 		*lib.Host        `json:"-"`
-		*SANComponent `json:"-"`
-		GlobalDiskState  *DiskState                        `json:"-"`
-		funcManager      *IOBalancerFManager               `json:"-"`
-		Controllers      []*Controller                     `json:"-"`
-		Jbods            []*SANJBODController           `json:"-"`
-		controllersMap   map[string]*Controller            `json:"-"`
-		linksMap         map[string]*SANLink            `json:"-"`
-		jbodsMap         map[string]*SANJBODController  `json:"-"`
-		disksMap         map[string]*SANDisk            `json:"-"`
-		FailManager      *AtmosphereFailManager            `json:"-"`
+		*SANComponent    `json:"-"`
+		GlobalDiskState  *DiskState                    `json:"-"`
+		funcManager      *IOBalancerFManager           `json:"-"`
+		Controllers      []*Controller                 `json:"-"`
+		Jbods            []*SANJBODController          `json:"-"`
+		controllersMap   map[string]*Controller        `json:"-"`
+		linksMap         map[string]*SANLink           `json:"-"`
+		jbodsMap         map[string]*SANJBODController `json:"-"`
+		disksMap         map[string]*SANDisk           `json:"-"`
+		FailManager      *AtmosphereFailManager        `json:"-"`
 
 		volumes       map[string]*SANVolume `json:"-"`
-		openedFiles   map[string]*FileInfo     `json:"-"`
-		packetCounter float64                  `json:"-"`
-		allComponents map[string]BreakAble     `json:"-"`
+		openedFiles   map[string]*FileInfo  `json:"-"`
+		packetCounter float64               `json:"-"`
+		allComponents map[string]BreakAble  `json:"-"`
 	}
 	IOBalancerFManager struct {
 		controF SANBFunction `json:"-"`
@@ -297,7 +297,6 @@ func (iob *IOBalancer) GetControllerById(conId string) *Controller {
 	return con
 }
 
-
 func (iob *IOBalancer) GetJbodConById(jbodId string) *SANJBODController {
 	jbod, ok := iob.jbodsMap[jbodId]
 	if !ok {
@@ -313,7 +312,6 @@ func (iob *IOBalancer) GetDiskById(diskId string) *SANDisk {
 	}
 	return disk
 }
-
 
 func (iob *IOBalancer) RemoveWorkingController(index int) {
 	iob.Controllers[index] = iob.Controllers[len(iob.Controllers)-1]

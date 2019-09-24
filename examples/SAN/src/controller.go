@@ -6,7 +6,7 @@ package src
 
 import (
 	"fmt"
-	"lib"
+	lib "gosan"
 	"log"
 )
 
@@ -15,11 +15,11 @@ var _ = fmt.Print
 type (
 	Controller struct {
 		*NamingProps
-		*ControllerProps  `json:"props"`
-		*lib.Host         `json:"-"`
-		*SANComponent  `json:"-"`
-		index             int         `json:"-"`
-		iob               *IOBalancer `json:"-"`
+		*ControllerProps `json:"props"`
+		*lib.Host        `json:"-"`
+		*SANComponent    `json:"-"`
+		index            int         `json:"-"`
+		iob              *IOBalancer `json:"-"`
 	}
 	ControllerProps struct {
 		*CommonProps
@@ -46,7 +46,6 @@ func (controller *Controller) ServerExecutor(TP *SANProcess, data interface{}) {
 	receiveAddress1 := arg.clientContr
 	sendAddress1 := arg.cacheJbod
 	//sendAddress1 := arg.contrCache
-
 
 	receiveAddress2 := arg.jbodCache
 	//receiveAddress2 := arg.cacheContr
@@ -90,8 +89,8 @@ func (controller *Controller) ServerExecutor(TP *SANProcess, data interface{}) {
 func NewController(host *lib.Host) *Controller {
 	naming := NewNamingProps(host.Name, host.Type, host.Id)
 	controller := &Controller{
-		NamingProps:      naming,
-		Host:             host,
+		NamingProps: naming,
+		Host:        host,
 		SANComponent: &SANComponent{
 			currentState: "default",
 		},

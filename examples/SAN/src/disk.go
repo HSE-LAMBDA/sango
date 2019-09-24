@@ -5,7 +5,7 @@ package src
 
 import (
 	"fmt"
-	"lib"
+	lib "gosan"
 )
 
 var _ = fmt.Print
@@ -15,11 +15,11 @@ type (
 		*NamingProps
 		*StorageProperties `json:"props"`
 		*lib.Storage       `json:"-"`
-		*SANComponent   `json:"-"`
-		GlobalDiskState    *DiskState            `json:"-"`
-		iob                *IOBalancer           `json:"-"`
+		*SANComponent      `json:"-"`
+		GlobalDiskState    *DiskState         `json:"-"`
+		iob                *IOBalancer        `json:"-"`
 		jbod               *SANJBODController `json:"-"`
-		index              int                   `json:"-"`
+		index              int                `json:"-"`
 	}
 
 	StorageProperties struct {
@@ -31,8 +31,8 @@ type (
 		AvgReadSpeed      float64 `json:"-"` // `json:"avg_read_speed"`
 		AvgWriteSpeed     float64 `json:"-"` // `json:"avg_write_speed"`
 		DataInterfacesCnt uint16  `json:"-"` // `json:"data_interfaces_cnt"`
-		UsedSpace         float64  `json:"-"` // `json:"used_space"`
-		FreeSpace         float64  `json:"-"` // `json:"free_space"`
+		UsedSpace         float64 `json:"-"` // `json:"used_space"`
+		FreeSpace         float64 `json:"-"` // `json:"free_space"`
 	}
 )
 
@@ -50,7 +50,7 @@ func (disk *SANDisk) DiskWriterManagerProcess(TP *SANProcess, data interface{}) 
 func NewSANDisk(libDisk *lib.Storage, jbod *SANJBODController) *SANDisk {
 	naming := NewNamingProps(libDisk.Name, libDisk.Type, libDisk.ID)
 	td := &SANDisk{
-		NamingProps:      naming,
+		NamingProps: naming,
 		StorageProperties: &StorageProperties{
 
 			FreeSpace:     libDisk.Size,

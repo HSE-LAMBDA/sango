@@ -1,16 +1,16 @@
 package src
 
 import (
-	"lib"
+	lib "gosan"
 	"log"
 )
 
 type SANLink struct {
 	*NamingProps
-	*lib.Link        `json:"-"`
+	*lib.Link     `json:"-"`
 	*SANComponent `json:"-"`
-	iob              *IOBalancer `json:"-"`
-	srcDst           []BreakAble `json:"-"`
+	iob           *IOBalancer `json:"-"`
+	srcDst        []BreakAble `json:"-"`
 }
 
 func NewSANLink(link *lib.Link, iob *IOBalancer) *SANLink {

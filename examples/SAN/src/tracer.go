@@ -8,7 +8,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"lib"
+	lib "gosan"
 	"log"
 	"os"
 )
@@ -162,7 +162,6 @@ func (tracer *TracerManager) ControllersTracer() {
 	}
 }
 
-
 //Disk tracer
 func (tracer *TracerManager) DiskDriveTracer() {
 	disks := tracer.iob.disksMap
@@ -196,7 +195,6 @@ func (tracer *TracerManager) VolumeTracer() {
 		volume.DevTemp = maxTemp
 	}
 }
-
 
 func (tracer *TracerManager) IOBalancerTracer() {
 	iob := tracer.iob

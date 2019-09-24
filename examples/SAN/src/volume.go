@@ -1,14 +1,14 @@
 package src
 
 import (
-	"lib"
+	lib "gosan"
 	"log"
 )
 
 type SANVolume struct {
 	*NamingProps
 	*StorageProperties `json:"props"`
-	*SANComponent   `json:"-"`
+	*SANComponent      `json:"-"`
 	disks              map[string]*SANDisk `json:"-"`
 }
 
@@ -42,7 +42,7 @@ func NewUnifiedLogicalVolume(jbods []*SANJBODController) *SANVolume {
 	}
 
 	tv := &SANVolume{
-		NamingProps:      naming,
+		NamingProps: naming,
 		StorageProperties: &StorageProperties{
 			FreeSpace:     capacity,
 			RawCapacity:   capacity,
@@ -79,7 +79,7 @@ func NewSANVolume(libVolume *lib.Volume) *SANVolume {
 	}
 
 	tv := &SANVolume{
-		NamingProps:      naming,
+		NamingProps: naming,
 		SANComponent: &SANComponent{
 			currentState: "default",
 		},

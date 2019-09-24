@@ -1,6 +1,9 @@
 package src
 
-import "log"
+import (
+	lib "gosan"
+	"log"
+)
 
 /*
 Implement Builder interface
@@ -57,7 +60,6 @@ func (t *sanBuilder) IOBalancer(iob *IOBalancer) SANBuilder {
 	return t
 }
 
-
 func (t *sanBuilder) Controllers(cons []*Controller) SANBuilder {
 	t.vc = cons
 	return t
@@ -67,7 +69,6 @@ func (t *sanBuilder) JbodControllers(jc []*SANJBODController) SANBuilder {
 	t.jc = jc
 	return t
 }
-
 
 func (t *sanBuilder) Client(cm *ClientManager) SANBuilder {
 	t.cm = cm
@@ -122,7 +123,6 @@ func (t *SAN) GetIoBalancer() *IOBalancer {
 	return t.iob
 }
 
-
 func (t *SAN) GetSANJBODControllers() []*SANJBODController {
 	return t.jc
 }
@@ -151,4 +151,48 @@ func (component *SANComponent) SetCurrentState(state string) {
 		log.Panic("state is empty")
 	}
 	component.currentState = state
+}
+
+
+/*
+
+===========
+
+
+===========
+ */
+
+type (
+	SANBFunction func(*SANProcess, interface{})
+
+	SANProcess struct {
+		*lib.Process
+	}
+)
+
+func NewSANProcess() *SANProcess {
+	return &SANProcess{}
+}
+
+func (tp *SANProcess) SetParent(p *lib.Process) {
+	tp.Process = p
+}
+
+func (tp *SANProcess) GetParent() *lib.Process {
+	return tp.Process
+}
+
+func FORK(name string, f SANBFunction, host *lib.Host, data interface{}) {
+	lib.SIM_subprocess_create_async(name, PIDecorator(f), host, NewSANProcess(), data)
+}
+
+func PIDecorator(function SANBFunction) lib.BaseBehaviourFunction {
+	return func(pi lib.ProcessInterface, data interface{}) {
+
+		tp, ok := pi.(*SANProcess)
+		if !ok {
+			log.Panic("SAN machine conversion error")
+		}
+		function(tp, data)
+	}
 }

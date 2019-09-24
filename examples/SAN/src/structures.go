@@ -4,7 +4,9 @@
 package src
 
 import (
-	"lib"
+	lib "gosan"
+	"io/ioutil"
+	"os"
 )
 
 type (
@@ -64,9 +66,9 @@ type (
 		StState           *DiskState         `json:"storage_state"`
 	}
 	NamingProps struct {
-		Type string `json:"type"`
-		Name string `json:"-"`
-		ID   string `json:"id"`
+		Type  string `json:"type"`
+		Name  string `json:"-"`
+		ID    string `json:"id"`
 		Owner string `json:"owner"`
 	}
 	CommonProps struct {
@@ -85,4 +87,20 @@ func NewNamingProps(name, typeID, id string) *NamingProps {
 		Type: typeID,
 		ID:   id,
 	}
+}
+
+
+func ParseFileAndUnmarshal(filename string) []byte {
+
+	jsonFile, err := os.Open(filename)
+	if err != nil {
+		panic("File error")
+	}
+
+	bytes, err := ioutil.ReadAll(jsonFile)
+	if err != nil {
+		panic("Read error")
+	}
+
+	return bytes
 }
