@@ -14,6 +14,7 @@ var _ = fmt.Print
 
 type (
 	Controller struct {
+		*Mock
 		*NamingProps
 		*ControllerProps `json:"props"`
 		*lib.Host        `json:"-"`

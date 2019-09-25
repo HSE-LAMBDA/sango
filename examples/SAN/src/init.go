@@ -3,22 +3,23 @@ package src
 import (
 	"encoding/json"
 	lib "gosan"
+	"gosan/deepcontroller"
 	"strings"
 )
 
-func init_SAN(flags *SystemFlags, parMap map[int]float64) SHD {
+func init_SAN(flags *lib.SystemFlags, parMap map[int]float64) SHD {
 	controllers := initControllers()
 	jbods := initSANJbods()
 
-	iob := initIobalancer(controllers, jbods)
+	iob := NewIOBalancer(lib.GetHostByName("Helper"), controllers, jbods)
 	cm := initClient(iob, flags, parMap)
-	am := initAnomalyManager(flags.anomalyFlags)
-	acm := initAtmosphereControlManager(flags.atmControlFileName)
-	afm := initAtmosphereFailManager(flags.atmDependenciesFileName, acm, iob)
+	am := initAnomalyManager(flags.AnomalyFlags)
+	acm := initAtmosphereControlManager(flags.AtmControlFileName)
+	afm := initAtmosphereFailManager(flags.AtmDependenciesFileName, acm, iob)
 	vols := initVolumes(iob)
 
-	tm := initTracer(flags.tracerFlags, iob, acm)
-	dcm := initDeepController(flags.dcFlags, iob, tm, cm)
+	tm := initTracer(flags.TracerFlags, iob, acm)
+	dcm := deepcontroller.Init_d(flags.DCFlags)
 
 	initComponentsWithIOBalancer(iob, tm.logs.StState, controllers)
 
@@ -30,17 +31,39 @@ func init_SAN(flags *SystemFlags, parMap map[int]float64) SHD {
 	_ = afm
 	_ = dcm
 	_ = vols
+	_ = cm
 	return san
 
 }
 
-func initClient(iob *IOBalancer, flags *SystemFlags, parMap map[int]float64) map[int]*ClientManager {
+
+func NewIOBalancer(host *lib.Host, cons []*Controller, jbods []*SANJBODController) *IOBalancer {
+		naming := NewNamingProps(host.Name, host.Type, host.Id)
+		iob := &IOBalancer{
+		NamingProps: naming,
+		Host:        host,
+		IOBalancerProps: &IOBalancerProps{
+		CommonProps: &CommonProps{
+		Status: OK,
+	},
+	},
+		Controllers: cons,
+		Jbods:jbods,
+		controllersMap: make(map[string]*Controller),
+		openedFiles:   make(map[string]*FileInfo),
+	}
+
+		return iob
+}
+
+
+func initClient(iob *IOBalancer, flags *lib.SystemFlags, parMap map[int]float64) map[int]*ClientManager {
 	clientHost := lib.GetHostByName("Client")
 	clients := make(map[int]*ClientManager)
 
-	filename := flags.clientFileName
-	writerFlags := flags.writeClientFlags
-	readerFlags := flags.readClientFlags
+	filename := flags.ClientFileName
+	writerFlags := flags.WriteClientFlags
+	readerFlags := flags.ReadClientFlags
 
 	if filename != "" {
 
@@ -66,7 +89,7 @@ func initClient(iob *IOBalancer, flags *SystemFlags, parMap map[int]float64) map
 			// FORK("clientTracer", cm.Tracer, clientHost, readerFlags)
 		}
 	} else {
-		n := flags.numJobs
+		n := flags.NumJobs
 		for n > 0 {
 			c := NewClientManager(clientHost, iob, "dc-client", 1e70, parMap)
 			clients[n] = c
@@ -112,31 +135,16 @@ func initSANJbods() []*SANJBODController {
 	return tatJBODs
 }
 
-func initIobalancer(cons []*Controller, jbods []*SANJBODController) *IOBalancer {
-	host := lib.GetHostByName("IOBalancer")
-	iob := NewIOBalancer(host, cons, jbods)
-	FORK("iob", iob.IOBalancerProcessManager, host, nil)
-	return iob
-}
 
-func initTracer(data *TracerFlags, iob *IOBalancer, acm *AtmosphereControlManager) *TracerManager {
+func initTracer(data *lib.TracerFlags, iob *IOBalancer, acm *AtmosphereControlManager) *TracerManager {
 	tm := NewTracerManager(iob, acm, nil)
 	host := lib.GetHostByName("Helper")
 	FORK("TracerM", tm.TracerManagerProcess, host, data)
 	return tm
 }
 
-func initDeepController(data *DeepControllerFlags, iob *IOBalancer, t *TracerManager,
-	cm map[int]*ClientManager) *DeepControllerManager {
-	dcm := NewDeepControllerManager(data, iob, cm, t)
-	host := lib.GetHostByName("Helper")
-	FORK("DCM", dcm.DeepControllerManagerProcess, host, data)
 
-	rwConversion = rwConversionFactory()
-	return dcm
-}
-
-func initAnomalyManager(data *AnomalyFlags) *AnomalyManager {
+func initAnomalyManager(data *lib.AnomalyFlags) *AnomalyManager {
 	am := NewAnomalyManager()
 	host := lib.GetHostByName("Helper")
 	FORK("AM", am.AnomalyManagerProcess, host, data)
@@ -157,8 +165,8 @@ func initAtmosphereFailManager(fileName string, acm *AtmosphereControlManager, i
 	host := lib.GetHostByName("Helper")
 	FORK("BreakDisks", afm.AtmosphereDiskFailManagerProcess, host, fileName)
 
-	conMap := make(map[string]BreakAble)
-	linkMap := make(map[string]BreakAble)
+	conMap := make(map[string]lib.DCAble)
+	linkMap := make(map[string]lib.DCAble)
 
 	for name, con := range iob.controllersMap {
 		conMap[name] = con

@@ -8,18 +8,18 @@ import (
 	_ "net/http/pprof"
 )
 
-func StartSimulation(flags *SystemFlags) {
+func StartSimulation(flags *lib.SystemFlags) {
 	go func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
 
-	lib.SIM_run(flags.simRun)
+	lib.SIM_run(flags.SimRun)
 }
 
-func PlatformInit(flags *SystemFlags) SHD {
-	lib.SIM_init(flags.packetFileName)
-	parMap := SimParallelization(flags.numJobsFileName)
-	lib.SIM_platform_init(flags.platformFileName, flags.nDisks)
+func PlatformInit(flags *lib.SystemFlags) SHD {
+	lib.SIM_init(flags.PacketFileName)
+	parMap := SimParallelization(flags.NumJobsFileName)
+	lib.SIM_platform_init(flags.PlatformFileName, flags.NDisks)
 	return init_SAN(flags, parMap)
 }
 

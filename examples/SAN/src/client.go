@@ -1,6 +1,7 @@
 package src
 
 import (
+	"fmt"
 	lib "gosan"
 	"log"
 	"math"
@@ -43,16 +44,17 @@ func NewMaster(host *lib.Host, clients map[int]*ClientManager) *Master {
 }
 
 func (M *Master) ClientManagerAsyncProcess(TP *SANProcess, data interface{}) {
-	arg, ok := data.(*ClientFlags)
+	arg, ok := data.(*lib.ClientFlags)
 	if !ok {
 		log.Panic("Async client flag data conversion error")
 	}
 
 	host := M.Host
-	fileSize := fRand(arg.MinFileSize, arg.MaxFileSize)
-	waitTime := fRand(arg.MinPauseTime, arg.MaxPauseTime)
 
 	for i := 0; i < arg.FileAmount; i++ {
+
+		fileSize := fRand(arg.MinFileSize, arg.MaxFileSize)
+		waitTime := fRand(arg.MinPauseTime, arg.MaxPauseTime)
 
 		numJobs := len(M.clients)
 		fileSize /= float64(numJobs)
@@ -89,7 +91,7 @@ func (CL *ClientManager) PacketSenderReceiverProcess(TP *SANProcess, data interf
 	cap := CL.Cap
 
 	nSending := file.Size / file.Packet1.Size
-	//nSending = 1
+	nSending = 1
 
 	for i := 0.; i < nSending; i++ {
 		res := CL.SendPacket(TP, fileInfo)
@@ -114,7 +116,7 @@ func (CL *ClientManager) PacketSenderReceiverProcess(TP *SANProcess, data interf
 
 	}
 
-	log.Printf("File%s,%.3f, %.2f, %s\n", file.Filename, file.Size/1e6, lib.SIM_get_clock(), fileInfo.serverName)
+	fmt.Printf("File%s,%.3f, %.2f, %s\n", file.Filename, file.Size/1e6, lib.SIM_get_clock(), fileInfo.serverName)
 	TP.SendPacket(lib.PACKET_FINALIZE, fileInfo.clientContr)
 }
 

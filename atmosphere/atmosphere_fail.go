@@ -11,8 +11,8 @@ import (
 type AtmosphereFailManager struct {
 	currentAtmosphere *AtmosphereControl
 	iob               *IOBalancer
-	br                []BreakAble
-	linkMap, conMap   map[string]BreakAble
+	br                []lib.DCAble
+	linkMap, conMap   map[string]lib.DCAble
 }
 
 func (AFM *AtmosphereFailManager) AtmosphereDiskFailManagerProcess(TP *SANProcess, data interface{}) {
@@ -58,38 +58,38 @@ func (AFM *AtmosphereFailManager) AtmosphereDiskFailManagerProcess(TP *SANProces
 
 func (AFM *AtmosphereFailManager) PoissonBreakManagerProcess(TP *SANProcess, data interface{}) {
 	return
-	TP.Daemonize()
-	components, ok := data.(map[string]BreakAble)
-	if !ok {
-		log.Panic("No such error")
-	}
-	lambda := 42.
-	seed := int64(42)
-	poisson := NewPoissonGenerator(seed)
-
-	for {
-		for _, component := range components {
-			component.Break(TP, lib.SIM_get_clock(), 1)
-			AFM.br = append(AFM.br, component)
-		}
-		TP.SIM_wait(float64(poisson.Poisson(lambda)))
-	}
+	//TP.Daemonize()
+	//components, ok := data.(map[string]lib.DCAble)
+	//if !ok {
+	//	log.Panic("No such error")
+	//}
+	//lambda := 42.
+	//seed := int64(42)
+	//poisson := NewPoissonGenerator(seed)
+	//
+	//for {
+	//	for _, component := range components {
+	//		component.Break(TP, lib.SIM_get_clock(), 1)
+	//		AFM.br = append(AFM.br, component)
+	//	}
+	//	TP.SIM_wait(float64(poisson.Poisson(lambda)))
+	//}
 }
 
 func (AFM *AtmosphereFailManager) PoissonRepairManagerProcess(TP *SANProcess, data interface{}) {
 	return
-	TP.Daemonize()
-
-	lambda := 42.
-	seed := int64(42)
-	poisson := NewPoissonGenerator(seed)
-
-	for {
-		for _, component := range AFM.br {
-			component.Repair(TP, 1)
-		}
-		TP.SIM_wait(float64(poisson.Poisson(lambda)))
-	}
+	//TP.Daemonize()
+	//
+	//lambda := 42.
+	//seed := int64(42)
+	//poisson := NewPoissonGenerator(seed)
+	//
+	//for {
+	//	for _, component := range AFM.br {
+	//		component.Repair(TP, 1)
+	//	}
+	//	TP.SIM_wait(float64(poisson.Poisson(lambda)))
+	//}
 }
 
 func NewAtmosphereFailManager(acm *AtmosphereControlManager, iob *IOBalancer) *AtmosphereFailManager {

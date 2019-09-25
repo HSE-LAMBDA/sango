@@ -12,6 +12,7 @@ var _ = fmt.Print
 
 type (
 	SANDisk struct {
+		*Mock
 		*NamingProps
 		*StorageProperties `json:"props"`
 		*lib.Storage       `json:"-"`

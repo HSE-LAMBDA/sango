@@ -127,3 +127,14 @@ func _basic_event_adding_factory() func(*Process, Resource, *Packet, EventType) 
 		return OK, t
 	}
 }
+
+
+type DCAble interface {
+	Break(*Process, float64, float64)
+	Repair(*Process, float64)
+	Update(map[string]float64)
+	Reset()
+
+	GetCurrentState() string
+	SetCurrentState(string)
+}

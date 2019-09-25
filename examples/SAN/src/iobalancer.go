@@ -37,7 +37,7 @@ type (
 		volumes       map[string]*SANVolume `json:"-"`
 		openedFiles   map[string]*FileInfo  `json:"-"`
 		packetCounter float64               `json:"-"`
-		allComponents map[string]BreakAble  `json:"-"`
+		//allComponents map[string]BreakAble  `json:"-"`
 	}
 	IOBalancerFManager struct {
 		controF SANBFunction `json:"-"`
@@ -64,66 +64,18 @@ type (
 		ReadQueueLength         uint8   `json:"read_queue_length"`
 		WriteQueueLength        uint8   `json:"write_queue_length"`
 	}
+
+	Mock struct {
+
+	}
 )
+
 
 func (iob *IOBalancer) IOBalancerProcessManager(TP *SANProcess, data interface{}) {
 	return
 }
 
-func NewIOBalancer(host *lib.Host, cons []*Controller, jbods []*SANJBODController) *IOBalancer {
-	naming := NewNamingProps(host.Name, host.Type, host.Id)
-	iob := &IOBalancer{
-		NamingProps: naming,
-		Host:        host,
-		SANComponent: &SANComponent{
-			currentState: "default",
-		},
-		IOBalancerProps: &IOBalancerProps{
-			CommonProps: &CommonProps{
-				Status: OK,
-			},
-		},
-		Controllers: cons,
-		Jbods:       jbods,
 
-		controllersMap: make(map[string]*Controller),
-		linksMap:       make(map[string]*SANLink),
-		jbodsMap:       make(map[string]*SANJBODController),
-		disksMap:       make(map[string]*SANDisk),
-
-		openedFiles:   make(map[string]*FileInfo),
-		allComponents: make(map[string]BreakAble),
-	}
-	// Need to initialize controllersMap
-	for _, con := range cons {
-		iob.controllersMap[con.NamingProps.Name] = con
-		iob.allComponents[con.NamingProps.Name] = con
-	}
-
-	// Need to initialize disksMap
-	for _, jbodCon := range jbods {
-		iob.jbodsMap[jbodCon.NamingProps.Name] = jbodCon
-		iob.allComponents[jbodCon.NamingProps.Name] = jbodCon
-
-		for _, disk := range jbodCon.disks {
-			iob.disksMap[disk.NamingProps.Name] = disk
-			iob.allComponents[disk.NamingProps.Name] = disk
-		}
-	}
-
-	iob.allComponents[iob.NamingProps.Name] = iob
-	iob.allComponents["Client"] = nil
-
-	// Need to initialize linksMap
-	linksMap := lib.GetAllLinksMap()
-	for name, link := range linksMap {
-		SANLink := NewSANLink(link, iob)
-		iob.linksMap[name] = SANLink
-		iob.allComponents[name] = SANLink
-	}
-
-	return iob
-}
 
 // todo code duplication
 
@@ -325,3 +277,28 @@ func (iob *IOBalancer) AddWorkingController(controller *Controller) {
 	controller.index = index
 	iob.Controllers = append(iob.Controllers, controller)
 }
+
+
+func (m *Mock) Break(*lib.Process, float64, float64) {
+	panic("implement me")
+}
+
+func (m *Mock) Repair(*lib.Process, float64) {
+	panic("implement me")
+}
+
+func (m *Mock) Update(map[string]float64) {
+	panic("implement me")
+}
+
+func (m *Mock) Reset() {
+	panic("implement me")
+}
+
+//func (m *Mock) GetCurrentState() string {
+//	panic("implement me")
+//}
+//
+//func (m *Mock) SetCurrentState(string) {
+//	panic("implement me")
+//}

@@ -5,6 +5,7 @@ package src
 
 import (
 	lib "gosan"
+	"gosan/anomaly"
 	"io/ioutil"
 	"os"
 )
@@ -72,7 +73,7 @@ type (
 		Owner string `json:"owner"`
 	}
 	CommonProps struct {
-		Status  ComponentStatus `json:"health"`
+		Status  anomaly.ComponentStatus `json:"health"`
 		DevTemp float64         `json:"dev_temp"`
 		Uptime  float64         `json:"uptime"`
 	}
@@ -88,7 +89,6 @@ func NewNamingProps(name, typeID, id string) *NamingProps {
 		ID:   id,
 	}
 }
-
 
 func ParseFileAndUnmarshal(filename string) []byte {
 

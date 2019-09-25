@@ -114,15 +114,15 @@ func initCallbacksFactory(env *Environment) func(EventType) []func(*Event) {
 	callbacks[StopEvent] = append(callbacks[StopEvent], stopSimulation)
 
 	// Anomaly Event callbacks //todo I deleted oneWorkerPopulateFunction
-	callbacks[LinkAnomalyEvent] = append(callbacks[LinkAnomalyEvent], breakLink)
-	callbacks[HostAnomalyEvent] = append(callbacks[HostAnomalyEvent], breakHost)
-
-	// Repair Event callbacks
-	callbacks[LinkRepairEvent] = append(callbacks[LinkRepairEvent], repairLink)
-	callbacks[HostRepairEvent] = append(callbacks[HostRepairEvent], repairHost)
-
-	// Disk Anomalies
-	callbacks[DiskAnomalyEvent] = append(callbacks[DiskAnomalyEvent], breakDisk)
+	//callbacks[LinkAnomalyEvent] = append(callbacks[LinkAnomalyEvent], breakLink)
+	//callbacks[HostAnomalyEvent] = append(callbacks[HostAnomalyEvent], breakHost)
+	//
+	//// Repair Event callbacks
+	//callbacks[LinkRepairEvent] = append(callbacks[LinkRepairEvent], repairLink)
+	//callbacks[HostRepairEvent] = append(callbacks[HostRepairEvent], repairHost)
+	//
+	//// Disk Anomalies
+	//callbacks[DiskAnomalyEvent] = append(callbacks[DiskAnomalyEvent], breakDisk)
 
 	return func(t EventType) []func(*Event) {
 		return callbacks[t]
@@ -146,7 +146,7 @@ type Event struct {
 
 	destinationProcess string
 
-	anomaly *Anomaly
+	// anomaly *Anomaly
 }
 
 //(link, task, process, destinationProcess)
@@ -160,4 +160,12 @@ func NewEvent(timeEnd float64, process *Process, eventType EventType, packet *Pa
 	}
 
 	return e
+}
+
+func(env *Environment) GetGlobalQueue() *globalEventQueue{
+	return &env.globalQueue
+}
+
+func(env *Environment) GetStepEnd() chan interface{}{
+	return env.stepEnd
 }

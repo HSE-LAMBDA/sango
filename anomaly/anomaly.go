@@ -1,17 +1,20 @@
-package lib
+package anomaly
 
-import "fmt"
+import (
+	"fmt"
+	lib "gosan"
+)
 
 var _ = fmt.Print
 
 type Anomaly struct {
-	resource Resource
+	resource lib.Resource
 	newState float64
 
 	anomalyPart float64
 }
 
-func NewAnomaly(resource Resource, newState float64) (e *Anomaly) {
+func NewAnomaly(resource lib.Resource, newState float64) (e *Anomaly) {
 	e = &Anomaly{
 		resource: resource,
 		newState: newState,

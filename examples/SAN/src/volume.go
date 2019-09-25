@@ -20,7 +20,7 @@ func initVolumes(iob *IOBalancer) map[string]*SANVolume {
 		tVol := NewSANVolume(vol)
 		SANVolumes[name] = tVol
 
-		iob.allComponents[name] = tVol
+		//iob.allComponents[name] = tVol
 	}
 	iob.volumes = SANVolumes
 	return SANVolumes

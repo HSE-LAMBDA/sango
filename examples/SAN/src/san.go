@@ -2,6 +2,7 @@ package src
 
 import (
 	lib "gosan"
+	"gosan/deepcontroller"
 	"log"
 )
 
@@ -51,7 +52,7 @@ type (
 		GetSANJBODControllers() []*SANJBODController
 
 		GetJsonLog() *LogJson
-		GetDeepControllerManager() *DeepControllerManager
+		GetDeepControllerManager() *deepcontroller.Manager
 	}
 )
 
@@ -131,7 +132,7 @@ func (t *SAN) GetJsonLog() *LogJson {
 	return t.tm.logs
 }
 
-func (t *SAN) GetDeepControllerManager() *DeepControllerManager {
+func (t *SAN) GetDeepControllerManager() *deepcontroller.Manager {
 	panic("implement me")
 }
 
@@ -153,14 +154,13 @@ func (component *SANComponent) SetCurrentState(state string) {
 	component.currentState = state
 }
 
-
 /*
 
 ===========
 
 
 ===========
- */
+*/
 
 type (
 	SANBFunction func(*SANProcess, interface{})

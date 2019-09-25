@@ -1,35 +1,36 @@
-package lib
+package anomaly
 
 import (
 	"container/heap"
 	"fmt"
+	lib "gosan"
 )
 
 var _ = fmt.Print
 
-func (process *Process) CreateAnomalyLinkSync(linkId *Link, timeClock float64, newState float64) {
+func CreateAnomalyLinkSync(process *lib.Process, linkId *lib.Link, timeClock float64, newState float64) {
 	CreateAnomalyLinkAsync(process, linkId, timeClock, newState)
 	process.env.stepEnd <- struct{}{}
 	<-process.resumeChan
 }
 
-func CreateAnomalyLinkAsync(process *Process, link *Link, timeClock float64, newState float64) {
+func CreateAnomalyLinkAsync(process *lib.Process, link *lib.Link, timeClock float64, newState float64) {
 	anom := NewAnomaly(link, newState)
-	event := NewEvent(timeClock, process, LinkAnomalyEvent, nil)
+	event := lib.NewEvent(timeClock, process, lib.LinkAnomalyEvent, nil)
 	event.anomaly = anom
 
 	heap.Push(&process.env.globalQueue, event)
 }
 
-func (process *Process) RepairLinkSync(link *Link, timeClock float64, newState float64) {
+func RepairLinkSync(process *lib.Process, link *lib.Link, timeClock float64, newState float64) {
 	RepairLinkAsync(process, link, timeClock)
 	process.env.stepEnd <- struct{}{}
 	<-process.resumeChan
 }
 
-func RepairLinkAsync(process *Process, link *Link, timeClock float64) {
+func RepairLinkAsync(process *lib.Process, link *lib.Link, timeClock float64) {
 	anom := NewAnomaly(link, 1)
-	event := NewEvent(timeClock, process, LinkRepairEvent, nil)
+	event := lib.NewEvent(timeClock, process, lib.LinkRepairEvent, nil)
 	event.anomaly = anom
 
 	x := process.env.globalQueue
@@ -37,8 +38,8 @@ func RepairLinkAsync(process *Process, link *Link, timeClock float64) {
 	heap.Push(&process.env.globalQueue, event)
 }
 
-func breakLink(e *Event) {
-	link := e.anomaly.resource.(*Link)
+func breakLink(e *lib.Event) {
+	link := e.anomaly.resource.(*lib.Link)
 	newState := e.anomaly.newState
 
 	oldState := link.State
@@ -46,9 +47,9 @@ func breakLink(e *Event) {
 
 	if newState == 0 {
 		for len(link.queue) > 0 {
-			event := heap.Pop(&link.queue).(*Event)
+			event := heap.Pop(&link.queue).(*lib.Event)
 			event.status = FAIL
-			GetCallbacks(event.eventType)[0](event)
+			lib.GetCallbacks(event.eventType)[0](event)
 		}
 	} else {
 		for _, event := range link.queue {
@@ -59,7 +60,7 @@ func breakLink(e *Event) {
 
 }
 
-func repairLink(e *Event) {
-	link := e.anomaly.resource.(*Link)
+func repairLink(e *lib.Event) {
+	link := e.anomaly.resource.(*lib.Link)
 	link.State = 1.
 }

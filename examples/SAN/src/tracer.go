@@ -27,11 +27,11 @@ type (
 )
 
 func (tracer *TracerManager) TracerManagerProcess(TP *SANProcess, data interface{}) {
-	args, ok := data.(*TracerFlags)
+	args, ok := data.(*lib.TracerFlags)
 	if !ok {
 		log.Panic("TracerFlags conversion error")
 	}
-	if args.outputFileName == "" {
+	if args.OutputFileName == "" {
 		log.Println("No need to write output")
 		return
 	}
@@ -65,12 +65,12 @@ func NewTracerManager(iob *IOBalancer, acm *AtmosphereControlManager, cm *Client
 	return tracer
 }
 
-func (tracer *TracerManager) CreateOutputFile(flagsData *TracerFlags) {
+func (tracer *TracerManager) CreateOutputFile(flagsData *lib.TracerFlags) {
 	var err error
 	log.Println("Output file will be generated")
 	tracer.OutputFileWrite = true
 
-	tracer.file, err = os.Create(flagsData.outputFileName)
+	tracer.file, err = os.Create(flagsData.OutputFileName)
 	if err != nil {
 		log.Panic(err)
 	}

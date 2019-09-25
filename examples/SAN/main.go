@@ -1,6 +1,7 @@
 package main
 
 import (
+	lib "gosan"
 	"gosan/examples/SAN/src"
 	"io/ioutil"
 	"log"
@@ -8,9 +9,9 @@ import (
 
 func main() {
 	log.SetOutput(ioutil.Discard)
-	sf := src.NewSystemFlags()
-	sf = src.InitFlags(sf)
-	sf = src.ParseFlags(sf)
+	sf := lib.NewSystemFlags()
+	sf = lib.InitFlags(sf)
+	sf = lib.ParseFlags(sf)
 	shd := src.PlatformInit(sf)
 	src.StartSimulation(sf)
 	_ = shd

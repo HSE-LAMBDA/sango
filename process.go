@@ -72,6 +72,15 @@ func ProcWrapper(processStrategy BaseBehaviourFunction, pi ProcessInterface, dat
 	}()
 }
 
+func ProcWrapperTemp(processStrategy func(*Process, interface{}), p *Process, data interface{}) {
+	go func() {
+		<-p.resumeChan
+		processStrategy(p, data)
+		delete(p.env.workers, p.pid)
+		p.env.stepEnd <- struct{}{}
+	}()
+}
+
 func (process *Process) Daemonize(resource ...Closeable) {
 	process.env.daemonList[process.pid] = process
 	process.env.systemResources = append(process.env.systemResources, resource...)
@@ -108,4 +117,9 @@ func (process *Process) GetName() string {
 
 func (process *Process) GetEnv() *Environment {
 	return process.env
+}
+
+
+func (process *Process) GetResumeChan() chan STATUS{
+	return process.resumeChan
 }

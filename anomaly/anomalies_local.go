@@ -1,8 +1,9 @@
-package src
+package anomaly
 
 import (
 	lib "gosan"
 	"log"
+	"math/rand"
 )
 
 type ComponentStatus int
@@ -25,8 +26,8 @@ const (
 	DELETED
 )
 
-func (AM *AnomalyManager) AnomalyManagerProcess(TP *SANProcess, data interface{}) {
-	args, ok := data.(*AnomalyFlags)
+func (AM *AnomalyManager) AnomalyManagerProcess(TP *lib.Process, data interface{}) {
+	args, ok := data.(*lib.AnomalyFlags)
 	if !ok {
 		log.Panic("Anomaly flag data conversion error")
 	}
@@ -156,3 +157,8 @@ type (
 		Repair func(float64, string)          `json:"repair"`
 	}
 )
+
+
+func fRand(fMin float64, fMax float64) float64 {
+	return fMin + rand.Float64()*(fMax-fMin)
+}
