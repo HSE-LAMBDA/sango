@@ -1,6 +1,6 @@
-# Welcome to GoSAN!
+# Welcome to SANgo!
 
-GoSAN is the discrete-event based simulator. 
+GoSAN is the discrete-event based simulator with reinforcement learning support. 
 
 # What it simulates?
 
