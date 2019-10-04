@@ -35,7 +35,7 @@ Client sends data blocks to controllers. They, in own turn, write data to storag
 ![enter image description here](https://sun9-64.userapi.com/c854216/v854216025/101217/U2KF-i4FyVc.jpg)
 # Reproducible run
 
-To play around check https://codeocean.com/capsule/9707185
+To play around with the simulator check https://codeocean.com/capsule/9707185 out. 
 
 # Available flags
 
